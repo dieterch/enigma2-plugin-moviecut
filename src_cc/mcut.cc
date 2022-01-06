@@ -770,7 +770,18 @@ int main(int argc, char* argv[])
     }
   } else
     f_cutsout = -1;
-  if (fstat(f_ap, &statbuf)) {
+  // Bug, bei Aufruf auf einem mounted CIFS Folder bricht das Programm mit
+  // failed to stat input ap file.
+  // ab.
+  // Durch remote debuggen mittels VSC auf einem Raspberrry 4 habe ich den Bug gefunden
+  // der Aufruf von fstat für das .ap file liefert einen Fehler
+  // mit fstat64 geht es !!! 
+  // 
+  // start Dieter Mod 2.1.2022  ... if (fstat64(f_ts, &statbuf64)) {
+  // ...  f_out = open(tmpname, O_WRONLY | O_CREAT | O_EXCL | O_LARGEFILE, statbuf64.st_mode & 0xfff);
+  //
+  // statt ... if (fstat(f_ap, &statbuf)) {
+    if (fstat64(f_ap, &statbuf64)) { 
     printf("Failed to stat input ap file.\n");
     close(f_ts);
     close(f_out);
@@ -785,7 +796,8 @@ int main(int argc, char* argv[])
     exit(4);
   }
   tmpname = makefilename(outname, suff, ".ts", ".ap");
-  f_apout = open(tmpname, O_WRONLY | O_CREAT | O_TRUNC, statbuf.st_mode & 0xfff);
+  // statt ... f_apout = open(tmpname, O_WRONLY | O_CREAT | O_TRUNC, statbuf.st_mode & 0xfff);
+  f_apout = open(tmpname, O_WRONLY | O_CREAT | O_TRUNC, statbuf64.st_mode & 0xfff);  
   if (f_apout == -1) {
     printf("Failed to open output ap file \"%s\"\n", tmpname);
     close(f_ts);
