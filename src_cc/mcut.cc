@@ -400,7 +400,7 @@ int donextinterval1(int fc, int fco, int fa, int fao, int fs, int fso, int fts, 
         c2 = readoff(fa, fao, fs, fso, inttotime(buf[0], buf[1]), 0, tlast);
         if (transfer_rest(fts, ftso, c1, c2, c2ret)) return -1;
         movesc(fs, fso, c2ret, 0);
-        printf("Interval: %lld - %lld\n", c1ret, c2ret);
+        printf("Interval: %lld - %lld\n", (long long)c1ret, (long long)c2ret);
 	// move all passed marks
 	lseek(fc, 0, SEEK_SET);
 	read(fc, buf, 12);
@@ -453,7 +453,7 @@ int donextinterval1(int fc, int fco, int fa, int fao, int fs, int fso, int fts, 
       c2 = readoff(fa, fao, fs, fso, -1.0, 0, tlast);
       if (transfer_rest(fts, ftso, c1, c2, c2ret)) return -1;
       movesc(fs, fso, c2ret, 0);
-      printf("Interval: %lld - %lld\n", c1ret, c2ret);
+      printf("Interval: %lld - %lld\n",  (long long)c1ret,  (long long)c2ret);
       return 1;
     }
     read(fc, buf, 12);
@@ -463,7 +463,7 @@ int donextinterval1(int fc, int fco, int fa, int fao, int fs, int fso, int fts, 
       c2 = readoff(fa, fao, fs, fso, inttotime(buf[0], buf[1]), 0, tlast);
       if (transfer_rest(fts, ftso, c1, c2, c2ret)) return -1;
       movesc(fs, fso, c2ret, 0);
-      printf("Interval: %lld - %lld\n", c1ret, c2ret);
+      printf("Interval: %lld - %lld\n",  (long long)c1ret,  (long long)c2ret);
       return 1;
     } else if (tmp != 0) {
       timetoint(inttotime(buf[0], buf[1])-toff, buf[0], buf[1]);
@@ -517,7 +517,7 @@ int donextinterval2(int barg, int earg, char* argv[], int fc, int fco, int fa, i
   c2 = readoff(fa, fao, fs, fso, strtotime(argv[i+1]), 0, tlast);
   if (transfer_rest(fts, ftso, c1, c2, c2ret)) return -1;
   movesc(fs, fso, c2ret, 0);
-  printf("Interval: %lld - %lld\n", c1ret, c2ret);
+  printf("Interval: %lld - %lld\n",  (long long)c1ret,  (long long)c2ret);
   if (n > 0) lseek(fc, 0, SEEK_SET);
   for (j=0; j<n; j++) {
     read(fc, buf, 12);
